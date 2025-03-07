@@ -78,8 +78,42 @@ namespace University.DTO
             {
                 Id = examDTO.Id,
                 Date = examDTO.Date,
-                SubjectId = examDTO.SubjectId,
-                StudentId = examDTO.StudentId,
+                Location = examDTO.Location,
+                CourseTipeId = examDTO.CourseTipeId,
+            };
+        }
+
+        public ExamDTO ExamToExamDTO(Exam exam)
+        {
+            return new ExamDTO
+            {
+                Id = exam.Id,
+                Date = exam.Date,
+                Location = exam.Location,
+                CourseTipeId = exam.CourseTipeId,
+            };
+        }
+        #endregion
+
+        #region EXAMRESULT MAPPER
+        public ExamResult ExamResultDTOtoExamResult(ExamResultDTO examResultDTO)
+        {
+            return new ExamResult
+            {
+                
+                StudentId = examResultDTO.StudentId,
+                ExamId = examResultDTO.ExamId,
+                ResultId = ((int)examResultDTO.Result)
+            };
+        }
+
+        public ExamResultDTO ExamResultToExamResultDTO(ExamResult examResult)
+        {
+            return new ExamResultDTO
+            {
+                StudentId = examResult.StudentId,
+                ExamId = examResult.ExamId,
+                Result = (Result)examResult.ResultId
             };
         }
         #endregion

@@ -7,7 +7,6 @@ namespace UniversityWebApp.DTO
     {
         public int Id { get; set; }
         public int CourseTipeId { get; set; }
-        public int Grade { get; set; }
         public required string Location { get; set; }
         public required DateTime Date { get; set; }
         public CourseTipeDTO? CourseTipeDTO { get; set; }
