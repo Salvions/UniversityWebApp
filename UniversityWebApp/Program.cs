@@ -1,5 +1,5 @@
-using University.DTO;
 using UniversityWebApp.DATA;
+using UniversityWebApp.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 

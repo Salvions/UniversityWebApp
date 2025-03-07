@@ -117,5 +117,12 @@ namespace University.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        //[HttpPut("{idStudent}/{idCourse}")]
+        //public IActionResult Put(int idStudent, int idCourse)
+        //{
+        //    var reg= _ctx.Registreds.Find(idStudent, idCourse);
+
+        //}
     }
 }
