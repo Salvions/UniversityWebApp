@@ -118,11 +118,31 @@ namespace University.Controllers
             }
         }
 
-        //[HttpPut("{idStudent}/{idCourse}")]
-        //public IActionResult Put(int idStudent, int idCourse)
-        //{
-        //    var reg= _ctx.Registreds.Find(idStudent, idCourse);
-
-        //}
+        [HttpPut("{idStudent}/{idCourse}")]
+        public IActionResult Put(int idStudent, int idCourse)
+        {
+            try
+            {
+                var reg = _ctx.Registreds.Find(idStudent, idCourse);
+                if (reg != null)
+                {
+                    return Conflict();
+                }
+                reg = new Registred
+                {
+                    StudentId = idStudent,
+                    CourseId = idCourse,
+                    RegistredDate = DateTime.Now
+                };
+                _ctx.Registreds.Add(reg);
+                _ctx.SaveChanges();
+                return Created();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Put student error");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }
