@@ -34,19 +34,19 @@ namespace UniversityWebApp.Controllers
         {
             try
             {
-                var course= _ctx.Courses.SingleOrDefault(x=>x.Id == id);
+                var course = _ctx.Courses.SingleOrDefault(x => x.Id == id);
                 if (course == null)
                 {
                     _logger.LogInformation($"Courses {id} not exists");
                     return BadRequest($"Courses {id} not exists");
                 }
-                CourseDTO courseDTO= _mapper.CourseToCourseDTO(course);
+                CourseDTO courseDTO = _mapper.CourseToCourseDTO(course);
                 _logger.LogInformation($"Courses {id}");
                 return Ok(courseDTO);
             }
             catch (Exception ex)
             {
-                _logger.LogError( $"Get Course error, {ex}");
+                _logger.LogError($"Get Course error, {ex}");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -56,7 +56,7 @@ namespace UniversityWebApp.Controllers
         {
             try
             {
-                var course = _ctx.Courses.Include(x=>x.CourseTipes)
+                var course = _ctx.Courses.Include(x => x.CourseTipes)
                     .SingleOrDefault(x => x.Id == id);
                 if (course == null)
                 {
@@ -83,7 +83,7 @@ namespace UniversityWebApp.Controllers
             try
             {
                 Course course = _mapper.CourseDTOtoCourse(courseDTO);
-                if(_ctx.Courses.Find(course.Id) != null)
+                if (_ctx.Courses.Find(course.Id) != null)
                 {
                     _logger.LogInformation($"Course {course.Id} already exists");
                     return BadRequest($"Course {course.Id} already exists");
@@ -121,6 +121,32 @@ namespace UniversityWebApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Delete Course error, {ex}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        #endregion
+
+        #region PUT REQUESTS
+
+        [HttpPut("AddSubject")]
+        public IActionResult PutCourseTipe([FromBody] CourseTipeDTO courseTipeDTO)
+        {
+            try
+            {
+                var support = _mapper.CourseTipeDTOtoCourseTipe(courseTipeDTO);
+                var courseTipe = _ctx.CourseTipes.Find(support.CourseId, support.SubjectId);
+                if (courseTipe != null)
+                {
+                    _logger.LogError("Conflict");
+                }
+                _ctx.CourseTipes.Add(support);
+                _ctx.SaveChanges();
+                _logger.LogInformation("CourseTipe added");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Put CourseTipe error, {ex}");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
