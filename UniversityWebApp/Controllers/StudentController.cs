@@ -21,6 +21,7 @@ namespace University.Controllers
             _logger = logger;
         }
 
+        #region GET REQUESTS
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -72,6 +73,9 @@ namespace University.Controllers
             }
         }
 
+        #endregion
+
+        #region POST REQUESTS
         [HttpPost]
         public IActionResult Post([FromBody] StudentDTO studentDTO)
         {
@@ -94,7 +98,9 @@ namespace University.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        #endregion
 
+        #region DELETE REQUESTS
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -117,7 +123,9 @@ namespace University.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        #endregion
 
+        #region PUT REQUESTS
         [HttpPut("{idStudent}/{idCourse}")]
         public IActionResult Put(int idStudent, int idCourse)
         {
@@ -144,5 +152,6 @@ namespace University.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        #endregion
     }
 }
