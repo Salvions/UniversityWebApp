@@ -20,6 +20,7 @@ namespace UniversityWebApp.Controllers
             _mapper = mapper;
         }
 
+        #region GET REQUESTS
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -73,7 +74,9 @@ namespace UniversityWebApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        #endregion
 
+        #region POST REQUESTS
         [HttpPost]
         public IActionResult Post([FromBody] CourseDTO courseDTO)
         {
@@ -96,7 +99,9 @@ namespace UniversityWebApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        #endregion
 
+        #region DELETE REQUESTS
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -119,5 +124,6 @@ namespace UniversityWebApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        #endregion
     }
 }
