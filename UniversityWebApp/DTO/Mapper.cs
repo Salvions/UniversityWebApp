@@ -2,7 +2,7 @@
 using UniversityWebApp.DATA;
 using UniversityWebApp.DTO;
 
-namespace University.DTO
+namespace UniversityWebApp.DTO
 {
     public class Mapper
     {
@@ -114,6 +114,29 @@ namespace University.DTO
                 StudentId = examResult.StudentId,
                 ExamId = examResult.ExamId,
                 Result = (Result)examResult.ResultId
+            };
+        }
+        #endregion
+
+        #region COURSETIPE MAPPER
+
+        public CourseTipe CourseTipeDTOtoCourseTipe(CourseTipeDTO courseTipeDTO)
+        {
+            return new CourseTipe
+            {
+                Id = courseTipeDTO.Id,
+                Credits = courseTipeDTO.Credits,
+                Title = courseTipeDTO.Title
+            };
+        }
+
+        public CourseTipeDTO CourseTipeToCourseTipeDTO(CourseTipe courseTipe)
+        {
+            return new CourseTipeDTO
+            {
+                Id = courseTipe.Id,
+                Credits = courseTipe.Credits,
+                Title = courseTipe.Title
             };
         }
         #endregion

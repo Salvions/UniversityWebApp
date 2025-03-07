@@ -7,6 +7,7 @@ namespace UniversityWebApp.DTO
         public int Id { get; set; }
         public required string Name { get; set; }
         public required string Surname { get; set; }
-        public List<CourseTipeDTO>? CourseTipeDTO { get; set; }
+        public List<CourseTipeDTO>? CourseTipeDTOs { get; set; }
+        public List<ExamResultDTO>? ExamResultDTOs { get; set; }
     }
 }

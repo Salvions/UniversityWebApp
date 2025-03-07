@@ -10,6 +10,5 @@ namespace UniversityWebApp.DTO
         public required string Location { get; set; }
         public required DateTime Date { get; set; }
         public CourseTipeDTO? CourseTipeDTO { get; set; }
-        public List<ExamResultDTO> examResultDTOs { get; set; }
     }
 }
