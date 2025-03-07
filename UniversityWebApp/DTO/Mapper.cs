@@ -71,5 +71,17 @@ namespace University.DTO
 
         #endregion
 
+        #region EXAM MAPPER
+        public Exam ExamDTOtoExam(ExamDTO examDTO)
+        {
+            return new Exam
+            {
+                Id = examDTO.Id,
+                Date = examDTO.Date,
+                SubjectId = examDTO.SubjectId,
+                StudentId = examDTO.StudentId,
+            };
+        }
+        #endregion
     }
 }
