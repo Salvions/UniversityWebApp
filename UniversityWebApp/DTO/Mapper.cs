@@ -1,5 +1,6 @@
 ﻿using Microsoft.Identity.Client;
 using UniversityWebApp.DATA;
+using UniversityWebApp.DTO;
 
 namespace University.DTO
 {
@@ -12,6 +13,7 @@ namespace University.DTO
             {
                 Id = courseDTO.Id,
                 Title = courseDTO.Title,
+                Tipology = courseDTO.Tipology,
             };
         }
         public CourseDTO CourseToCourseDTO(Course course)
@@ -20,6 +22,7 @@ namespace University.DTO
             {
                 Id = course.Id,
                 Title = course.Title,
+                Tipology = course.Tipology,
             };
         }
         #endregion
