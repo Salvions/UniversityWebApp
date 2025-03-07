@@ -164,5 +164,27 @@ namespace UniversityWebApp.DTO
         }
 
         #endregion
+
+        #region SUBJECT MAPPER
+
+        public Subject SubjectDTOtoSubject(SubjectDTO subjectDTO)
+        {
+            return new Subject
+            {
+                Id = subjectDTO.Id,
+                Title = subjectDTO.Title
+            };
+        }
+
+        public SubjectDTO SubjectToSubjectDTO(Subject subject)
+        {
+            return new SubjectDTO
+            {
+                Id = subject.Id,
+                Title = subject.Title
+            };
+        }
+
+        #endregion
     }
 }
