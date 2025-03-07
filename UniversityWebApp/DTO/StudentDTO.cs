@@ -1,4 +1,5 @@
-﻿using UniversityWebApp.DATA;
+﻿using Microsoft.AspNetCore.Routing.Constraints;
+using UniversityWebApp.DATA;
 
 namespace UniversityWebApp.DTO
 {
@@ -7,6 +8,7 @@ namespace UniversityWebApp.DTO
         public int Id { get; set; }
         public required string Name { get; set; }
         public required string Surname { get; set; }
+        public double? Average { get; set; }
         public List<CourseTipeDTO>? CourseTipeDTOs { get; set; }
         public List<ExamResultDTO>? ExamResultDTOs { get; set; }
     }

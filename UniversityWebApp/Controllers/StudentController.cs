@@ -73,6 +73,29 @@ namespace University.Controllers
             }
         }
 
+        [HttpGet("{id}/Avarege")]
+        public IActionResult GetAvarege(int id)
+        {
+            try
+            {
+                var student = _ctx.Students.Include(w => w.ExamResults)
+                    .ThenInclude(w => w.Exam)
+                    .ThenInclude(w => w.CourseTipe)
+                    .SingleOrDefault(w => w.Id == id);
+                if (student == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Get student {id} avarege error");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         #endregion
 
         #region POST REQUESTS
