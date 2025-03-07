@@ -12,7 +12,7 @@ using UniversityWebApp.DATA;
 namespace UniversityWebApp.Migrations
 {
     [DbContext(typeof(UniversityDbContext))]
-    [Migration("20250307090644_CreateDatabaseUniversityDB")]
+    [Migration("20250307091523_CreateDatabaseUniversityDB")]
     partial class CreateDatabaseUniversityDB
     {
         /// <inheritdoc />
@@ -109,11 +109,50 @@ namespace UniversityWebApp.Migrations
                     b.Property<int>("Grade")
                         .HasColumnType("int");
 
+                    b.Property<int>("ResultId")
+                        .HasColumnType("int");
+
                     b.HasKey("StudentId", "ExamId");
 
                     b.HasIndex("ExamId");
 
+                    b.HasIndex("ResultId");
+
                     b.ToTable("ExamResults");
+                });
+
+            modelBuilder.Entity("UniversityWebApp.DATA.ResultType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ResultType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Title = "Passed"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Title = "Failed"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Title = "Rejected"
+                        });
                 });
 
             modelBuilder.Entity("UniversityWebApp.DATA.Student", b =>
@@ -190,6 +229,12 @@ namespace UniversityWebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("UniversityWebApp.DATA.ResultType", "Result")
+                        .WithMany("ExamResults")
+                        .HasForeignKey("ResultId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("UniversityWebApp.DATA.Student", "Student")
                         .WithMany("ExamResults")
                         .HasForeignKey("StudentId")
@@ -197,6 +242,8 @@ namespace UniversityWebApp.Migrations
                         .IsRequired();
 
                     b.Navigation("Exam");
+
+                    b.Navigation("Result");
 
                     b.Navigation("Student");
                 });
@@ -212,6 +259,11 @@ namespace UniversityWebApp.Migrations
                 });
 
             modelBuilder.Entity("UniversityWebApp.DATA.Exam", b =>
+                {
+                    b.Navigation("ExamResults");
+                });
+
+            modelBuilder.Entity("UniversityWebApp.DATA.ResultType", b =>
                 {
                     b.Navigation("ExamResults");
                 });

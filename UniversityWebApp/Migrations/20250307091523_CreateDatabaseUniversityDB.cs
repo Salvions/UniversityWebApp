@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace UniversityWebApp.Migrations
 {
     /// <inheritdoc />
@@ -23,6 +25,19 @@ namespace UniversityWebApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ResultType",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResultType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -107,7 +122,8 @@ namespace UniversityWebApp.Migrations
                 {
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     ExamId = table.Column<int>(type: "int", nullable: false),
-                    Grade = table.Column<int>(type: "int", nullable: false)
+                    Grade = table.Column<int>(type: "int", nullable: false),
+                    ResultId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,11 +135,27 @@ namespace UniversityWebApp.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_ExamResults_ResultType_ResultId",
+                        column: x => x.ResultId,
+                        principalTable: "ResultType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_ExamResults_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "ResultType",
+                columns: new[] { "Id", "Title" },
+                values: new object[,]
+                {
+                    { 1, "Passed" },
+                    { 2, "Failed" },
+                    { 3, "Rejected" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -142,6 +174,11 @@ namespace UniversityWebApp.Migrations
                 column: "ExamId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExamResults_ResultId",
+                table: "ExamResults",
+                column: "ResultId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Exams_CourseTipeId",
                 table: "Exams",
                 column: "CourseTipeId");
@@ -155,6 +192,9 @@ namespace UniversityWebApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Exams");
+
+            migrationBuilder.DropTable(
+                name: "ResultType");
 
             migrationBuilder.DropTable(
                 name: "Students");
