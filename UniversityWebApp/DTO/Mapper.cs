@@ -140,5 +140,29 @@ namespace UniversityWebApp.DTO
             };
         }
         #endregion
+
+        #region REGISTRED MAPPER
+
+        public Registred RegistredDTOtoRegistred(RegistredDTO registredDTO)
+        {
+            return new Registred
+            {
+                StudentId = registredDTO.StudentId,
+                CourseId = registredDTO.CourseId,
+                RegistredDate = registredDTO.RegistredDate
+            };
+        }
+
+        public RegistredDTO RegistredDTOtoRegistred(Registred registred)
+        {
+            return new RegistredDTO
+            {
+                StudentId = registred.StudentId,
+                CourseId = registred.CourseId,
+                RegistredDate = registred.RegistredDate
+            };
+        }
+
+        #endregion
     }
 }

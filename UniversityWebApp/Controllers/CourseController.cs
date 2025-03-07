@@ -96,5 +96,28 @@ namespace UniversityWebApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var course = _ctx.Courses.Find(id);
+                if (course == null)
+                {
+                    _logger.LogInformation($"Course {id} not exists");
+                    return BadRequest($"Course {id} not exists");
+                }
+                _ctx.Courses.Remove(course);
+                _ctx.SaveChanges();
+                _logger.LogInformation($"Course {id} deleted");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Delete Course error, {ex}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }
