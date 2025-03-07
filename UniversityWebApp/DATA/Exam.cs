@@ -13,5 +13,6 @@ namespace UniversityWebApp.DATA
 
         [ForeignKey("CourseTipeId")]
         public CourseTipe? CourseTipe { get; set; }
+        public List<ExamResult>? ExamResults { get; set; }
     }
 }
