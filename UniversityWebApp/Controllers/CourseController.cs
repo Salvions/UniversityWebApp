@@ -74,5 +74,27 @@ namespace UniversityWebApp.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult Post([FromBody] CourseDTO courseDTO)
+        {
+            try
+            {
+                Course course = _mapper.CourseDTOtoCourse(courseDTO);
+                if(_ctx.Courses.Find(course.Id) != null)
+                {
+                    _logger.LogInformation($"Course {course.Id} already exists");
+                    return BadRequest($"Course {course.Id} already exists");
+                }
+                _ctx.Courses.Add(course);
+                _ctx.SaveChanges();
+                _logger.LogInformation($"Course {course.Id} created");
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Create Course error, {ex}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }
