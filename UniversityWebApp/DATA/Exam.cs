@@ -5,6 +5,7 @@ namespace UniversityWebApp.DATA
 {
     public class Exam
     {
+        public int Id { get; set; }
         public int StudentId { get; set; }
         public int CourseTipeId { get; set; }
         public required string Location { get; set; }

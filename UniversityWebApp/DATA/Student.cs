@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public required string?  Name { get; set; }
         public required string  Surname { get; set; }
-        public List<Exam>? Exams { get; set; }
+        public List<ExamResult>? ExamResults { get; set; }
     }
 }

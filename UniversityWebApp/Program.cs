@@ -1,3 +1,6 @@
+using University.DTO;
+using UniversityWebApp.DATA;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+string? connStr = builder.Configuration.GetConnectionString("Default");
+builder.Services.AddSqlServer<UniversityDbContext>(connStr);
+
+builder.Services.AddSingleton<Mapper>();
+
 
 var app = builder.Build();
 
