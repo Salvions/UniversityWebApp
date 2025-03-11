@@ -83,7 +83,7 @@ namespace UniversityWebApp.Controllers
         [HttpPost("massive")]
         public IActionResult Post([FromBody] List<ExamResultDTO> examResultsDTO)
         {
-            var exresult = _ctx.ExamResults.ToList();
+            var exresult = _ctx.ExamResults.Where(x=>x.Grade==-1).ToList();
             try
             {
                 var examResults = examResultsDTO.ConvertAll(_mapper.ExamResultDTOtoExamResult);
@@ -97,7 +97,8 @@ namespace UniversityWebApp.Controllers
                     {
                         _logger.LogError($"Post Student not Registred");
                     }
-                    else if(exresult.SingleOrDefault(ex).Grade!=0)
+                    else if(exresult.Find(x=>x.StudentId == ex.StudentId 
+                            && x.ExamId == ex.ExamId) ==null)
                     {
                         _logger.LogError($"Post examResult conflict");
                     }

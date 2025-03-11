@@ -131,20 +131,41 @@ namespace University.Controllers
         [HttpPost("RegisterExams")]
         public IActionResult Post([FromBody] ExamResultDTO examResultDTO)
         {
-            var ex=_ctx.ExamResults.ToList();
+            var exr=_ctx.ExamResults.ToList();
+            var st=_ctx.Students.Include(x=>x.Registreds)
+                .ThenInclude(x => x.Course)
+                .SingleOrDefault(x=>x.Id == examResultDTO.StudentId);
+            var ex=_ctx.Exams.Include(x => x.CourseTipe)
+                .ToList();
+
             try
             {
                 var examResult = _mapper.ExamResultDTOtoExamResult(examResultDTO);
-                if (ex.Any(w => w.StudentId == examResult.StudentId && w.ExamId == examResult.ExamId))
+                if (exr.Any(w => w.StudentId == examResult.StudentId && w.ExamId == examResult.ExamId))
                 {
                     _logger.LogInformation("Post student register exams conflict");
                     return Conflict();
                 }
-                examResult.Grade = 0;
-                _ctx.ExamResults.Add(examResult);
-                _ctx.SaveChanges();
-                _logger.LogInformation("Post student register exams");
-                return Created();
+                foreach(var e in ex)
+                {
+                    if (e.Id == examResult.ExamId)
+                    {
+                        if(st.Registreds.SingleOrDefault(x => x.CourseId == e.CourseTipe.CourseId) == null)
+                        {
+                            _logger.LogInformation("Post student register exams not registred");
+                            return BadRequest();
+                        }
+                        else
+                        {
+                            examResult.Grade = -1;
+                            _ctx.ExamResults.Add(examResult);
+                            _ctx.SaveChanges();
+                            _logger.LogInformation("Post student register exams");
+                            return Created();
+                        }
+                    } 
+                }
+                return BadRequest();
             }
             catch
             {
