@@ -87,7 +87,7 @@ namespace University.Controllers
                     _logger.LogError(id, $"Get student {id} avarege not found");
                     return NotFound();
                 }
-                var Gsum = student.ExamResults.Sum(x => x.Grade);
+                var Gsum = student.ExamResults.Sum(x => x.Grade * x.Exam.CourseTipe.Credits);
                 var Csum= student.ExamResults.Sum(x => x.Exam.CourseTipe.Credits);
                 var avarege = Gsum / Csum;
                 StudentDTO sDTO= _mapper.StudentToStudentDTO(student);
@@ -124,6 +124,31 @@ namespace University.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Post student error");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost("RegisterExams")]
+        public IActionResult Post([FromBody] ExamResultDTO examResultDTO)
+        {
+            var ex=_ctx.ExamResults.ToList();
+            try
+            {
+                var examResult = _mapper.ExamResultDTOtoExamResult(examResultDTO);
+                if (ex.Any(w => w.StudentId == examResult.StudentId && w.ExamId == examResult.ExamId))
+                {
+                    _logger.LogInformation("Post student register exams conflict");
+                    return Conflict();
+                }
+                examResult.Grade = 0;
+                _ctx.ExamResults.Add(examResult);
+                _ctx.SaveChanges();
+                _logger.LogInformation("Post student register exams");
+                return Created();
+            }
+            catch
+            {
+                _logger.LogError("Post student register exams error");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

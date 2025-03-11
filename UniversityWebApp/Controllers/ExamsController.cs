@@ -151,6 +151,35 @@ namespace UniversityWebApp.Controllers
             }
         }
 
+        [HttpPost("massive")]
+        public IActionResult Post([FromBody] List<ExamDTO> examDTOs)
+        {
+            var exa = _ctx.Exams;
+            try
+            {
+                foreach (var examDTO in examDTOs)
+                {
+                    var exam = _mapper.ExamDTOtoExam(examDTO);
+                    if (exa.SingleOrDefault(x=>x.Date==examDTO.Date 
+                    && x.Location==examDTO.Location 
+                    && x.CourseTipeId==examDTO.CourseTipeId)!=null)
+                    {
+                        _logger.LogError($"Post exam {exam.Id} already exists");
+                        //return BadRequest($"Post exam {exam.Id} already exists");
+                    }
+                    exam.Id = 0;
+                    _ctx.Exams.Add(exam);
+                }
+                _ctx.SaveChanges();
+                _logger.LogInformation($"Post exams");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Post Exams error, {ex}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
         #endregion
     }
 }
