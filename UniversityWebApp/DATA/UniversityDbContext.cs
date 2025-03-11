@@ -25,5 +25,6 @@ namespace UniversityWebApp.DATA
         public DbSet<ExamResult> ExamResults { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Registred> Registreds { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
     }
 }

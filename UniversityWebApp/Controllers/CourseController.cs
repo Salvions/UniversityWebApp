@@ -99,6 +99,41 @@ namespace UniversityWebApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpPost("AddSubject")]
+        public IActionResult Post([FromBody] CourseTipeDTO courseTipeDTO)
+        {
+            try
+            {
+                var ct = _mapper.CourseTipeDTOtoCourseTipe(courseTipeDTO);
+                if(_ctx.CourseTipes.Find(ct.CourseId, ct.SubjectId) != null)
+                {
+                    _logger.LogInformation("Conflict");
+                    return BadRequest("Conflict");
+                }
+                var course= _ctx.Courses.Find(ct.CourseId);
+                if (course == null)
+                {
+                    _logger.LogInformation($"Course {ct.CourseId} not exists");
+                    return BadRequest($"Course {ct.CourseId} not exists");
+                }
+                if(course.CourseTipes.Sum(x => x.Credits) + ct.Credits > 130)
+                {
+                    _logger.LogInformation("Course credits limit reached");
+                    return BadRequest("Course credits limit reached");
+                }
+                _ctx.CourseTipes.Add(ct);
+                _ctx.SaveChanges();
+                _logger.LogInformation("CourseTipe added");
+                return Ok();
+            }
+            catch
+            (Exception ex)
+            {
+                _logger.LogError($"Create CourseTipe error, {ex}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
         #endregion
 
         #region DELETE REQUESTS

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 
 namespace UniversityWebApp.DATA
 {
@@ -7,8 +8,8 @@ namespace UniversityWebApp.DATA
         public int Id { get; set; }
         public int Credits { get; set; }
         public int SubjectId { get; set; }
-        public required string? Title { get; set; }
         public int CourseId { get; set; }
+        public required string? Title { get; set; }
         [ForeignKey("SubjectId")]
         public Subject? Subject { get; set; }
         [ForeignKey("CourseId")]

@@ -186,5 +186,27 @@ namespace UniversityWebApp.DTO
         }
 
         #endregion
+
+        #region TEACHER MAPPER
+        public TeacherDTO TeacherToTeacherDTO(Teacher input)
+        {
+            return new TeacherDTO
+            {
+                Id = input.Id,
+                Name = input.Name,
+                Surname = input.Surname
+            };
+        }
+
+        public Teacher TeacherDTOtoTeacher(TeacherDTO input)
+        {
+            return new Teacher
+            {
+                Id = input.Id,
+                Name = input.Name,
+                Surname = input.Surname
+            };
+        }
+        #endregion
     }
 }

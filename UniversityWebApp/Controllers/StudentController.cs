@@ -152,6 +152,8 @@ namespace University.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+
         #endregion
 
         #region DELETE REQUESTS
@@ -189,6 +191,11 @@ namespace University.Controllers
                 if (reg != null)
                 {
                     return Conflict();
+                }
+                var cor = _ctx.Courses.Find(idCourse);
+                if (cor.CourseTipes.Sum(x=>x.Credits)<130)
+                {
+                    return BadRequest();
                 }
                 reg = new Registred
                 {
