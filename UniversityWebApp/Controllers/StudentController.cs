@@ -84,14 +84,20 @@ namespace University.Controllers
                     .SingleOrDefault(w => w.Id == id);
                 if (student == null)
                 {
+                    _logger.LogError(id, $"Get student {id} avarege not found");
                     return NotFound();
                 }
-
-                return Ok();
+                var Gsum = student.ExamResults.Sum(x => x.Grade);
+                var Csum= student.ExamResults.Sum(x => x.Exam.CourseTipe.Credits);
+                var avarege = Gsum / Csum;
+                StudentDTO sDTO= _mapper.StudentToStudentDTO(student);
+                sDTO.Average = avarege;
+                _logger.LogInformation($"Get student {id} && avarege");
+                return Ok(sDTO);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Get student {id} avarege error");
+                _logger.LogError(e, $"Get student {id} && avarege error");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
