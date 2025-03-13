@@ -134,6 +134,41 @@ namespace UniversityWebApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpPost("CloneCourse")]
+        public IActionResult CloneCourse([FromBody] CourseDTO courseDTO)
+        {
+            var courseTipes = _ctx.CourseTipes.Where(x=>x.CourseId==courseDTO.Id);
+            var course = _mapper.CourseDTOtoCourse(courseDTO);
+            if(_ctx.Courses.Find(course.Id) == null)
+            {
+                _logger.LogInformation($"Course {course.Id} already exists");
+                return BadRequest($"Course {course.Id} already exists");
+            }
+            Course cloneCourse = new Course()
+            {
+                Id = 0,
+                Title = course.Title,
+                Tipology = course.Tipology,
+                StartDate= course.StartDate,
+            };
+            _ctx.Courses.Add(cloneCourse);
+            _ctx.SaveChanges();
+            course= _ctx.Courses.Find(cloneCourse);
+            foreach (var ct in courseTipes)
+            {
+                var courseTipe = new CourseTipe()
+                {
+                    CourseId = course.Id,
+                    SubjectId = ct.SubjectId,
+                    Title = ct.Title,
+                    Credits = ct.Credits,
+                };
+                _ctx.CourseTipes.Add(courseTipe);
+            }
+            _ctx.SaveChanges();
+            return Created($"api/Course/{course.Id}", course);
+        }
         #endregion
 
         #region DELETE REQUESTS

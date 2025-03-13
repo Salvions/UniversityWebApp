@@ -14,6 +14,7 @@ namespace UniversityWebApp.DTO
                 Id = courseDTO.Id,
                 Title = courseDTO.Title,
                 Tipology = courseDTO.Tipology,
+                StartDate = courseDTO.StartDate,
             };
         }
         public CourseDTO CourseToCourseDTO(Course course)
@@ -23,6 +24,7 @@ namespace UniversityWebApp.DTO
                 Id = course.Id,
                 Title = course.Title,
                 Tipology = course.Tipology,
+                StartDate = (DateTime)course.StartDate
             };
         }
         #endregion
