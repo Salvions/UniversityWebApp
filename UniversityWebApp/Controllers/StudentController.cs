@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using UniversityWebApp.DATA;
 using UniversityWebApp.DTO;
 
@@ -182,15 +183,11 @@ namespace University.Controllers
                 .ToList();
             var exams = _ctx.Exams.Include(x => x.CourseTipe).ToList();
             var exr = _ctx.ExamResults.ToList();
-            foreach (var exd in ExamResultDTOs)
+            var exds = ExamResultDTOs.Except(ExamResultDTOs.Join(exr, exd => new { exd.StudentId, exd.ExamId }, exr => new { exr.StudentId, exr.ExamId }, (exd, exr) => exd));
+            foreach (var exd in exds)
             {
                 try
-                {
-                    if (exr.Any(x => x.ExamId == exd.ExamId && x.StudentId == exd.StudentId))
-                    {
-                        _logger.LogInformation("Post student register all exams conflict");
-                        break;
-                    }
+                {   
                     var st = students.SingleOrDefault(x => x.Id == exd.StudentId);
                     if (st == null)
                     {
