@@ -10,8 +10,8 @@ namespace UniversityWebApp.DATA
         public int CourseId { get; set; }
         public DateTime RegistredDate { get; set; }
         [ForeignKey("StudentId")]
-        public Student Student { get; set; }
+        public Student? Student { get; set; }
         [ForeignKey("CourseId")]
-        public Course Course { get; set; }
+        public Course? Course { get; set; }
     }
 }

@@ -129,7 +129,7 @@ namespace University.Controllers
         }
 
         [HttpPost("RegisterExams")]
-        public IActionResult Post([FromBody] ExamResultDTO examResultDTO)
+        public IActionResult PostExam([FromBody] ExamResultDTO examResultDTO)
         {
             var exr=_ctx.ExamResults.ToList();
             var st=_ctx.Students.Include(x=>x.Registreds)
@@ -174,6 +174,57 @@ namespace University.Controllers
             }
         }
 
+        [HttpPost("RegisterExams")]
+        public IActionResult RgisterExams([FromBody] List<ExamResultDTO> ExamResultDTOs)
+        {
+            var students = _ctx.Students.Include(x => x.Registreds)
+                .ThenInclude(x => x.Course)
+                .ToList();
+            var exams = _ctx.Exams.Include(x => x.CourseTipe).ToList();
+            var exr = _ctx.ExamResults.ToList();
+            foreach (var exd in ExamResultDTOs)
+            {
+                try
+                {
+                    if (exr.Any(x => x.ExamId == exd.ExamId && x.StudentId == exd.StudentId))
+                    {
+                        _logger.LogInformation("Post student register all exams conflict");
+                        break;
+                    }
+                    var st = students.SingleOrDefault(x => x.Id == exd.StudentId);
+                    if (st == null)
+                    {
+                        _logger.LogInformation("Post student register all exams not found");
+                        break;
+                    }
+                    var ex = exams.SingleOrDefault(x => x.Id == exd.ExamId);
+                    if (ex == null)
+                    {
+                        _logger.LogInformation("Post student register all exams not found");
+                        break;
+                    }
+                    if (st.Registreds.SingleOrDefault(x => x.CourseId == ex.CourseTipe.CourseId) == null)
+                    {
+                        _logger.LogInformation("Post student register all exams not registred");
+                        break;
+                    }
+                    else
+                    {
+                        var examResult = _mapper.ExamResultDTOtoExamResult(exd);
+                        examResult.Grade = -1;
+                        _ctx.ExamResults.Add(examResult);
+                        _ctx.SaveChanges();
+                        _logger.LogInformation("Post student register all exams");
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Post student register all exams error");
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }   
+            }
+            return Created();
+        }
 
         #endregion
 

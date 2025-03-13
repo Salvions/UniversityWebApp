@@ -22,7 +22,11 @@ namespace UniversityWebApp.Controllers
         }
 
         #region GET REQUESTS
-        
+
+        /// <summary>
+        /// ritorna tutti i subjects senza le sue relazioni
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetAll()
         {
