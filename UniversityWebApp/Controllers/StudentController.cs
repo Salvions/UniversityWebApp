@@ -128,7 +128,7 @@ namespace University.Controllers
             }
         }
 
-        [HttpPost("RegisterExams")]
+        [HttpPost("RegisterExam")]
         public IActionResult PostExam([FromBody] ExamResultDTO examResultDTO)
         {
             var exr=_ctx.ExamResults.ToList();
